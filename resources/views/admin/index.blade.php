@@ -35,10 +35,9 @@
                                             <img src="{{asset('dash/assets/images/user/avatar-2.jpg')}}" alt="Image"
                                                  class="rounded-circle avatar avatar-xl">
                                             <div class="mt-3 ms-md-4">
-                                                <h2 class="mb-1 text-white fw-600">Good afternoon, <br> Techne Infosys
+                                                <h2 class="mb-1 text-white fw-600">تقرير النظام الحالي
                                                 </h2>
-                                                <p class="text-white"> Here is what’s happening with your projects
-                                                    today:</p>
+                                                <p class="text-white mb-0">ملخص لحظي لبيانات المبيعات والمشتريات الخاصة بحسابك.</p>
                                             </div>
                                         </div>
                                     </div>
@@ -52,9 +51,8 @@
                         <div class="border rounded card-body border-success bg-light-success">
                             <div class="d-flex align-items-center">
                                 <div class="numbers flex-grow-1 pe-3">
-                                    <p class="mb-1 fw-600 text-muted">Today's Money</p>
-                                    <h4 class="mb-0 fw-700 text-dark-black">$53,000 <span
-                                            class="text-sm text-success fw-700">+55%</span></h4>
+                                    <p class="mb-1 fw-600 text-muted">إجمالي المبيعات</p>
+                                    <h4 class="mb-0 fw-700 text-dark-black">{{ number_format((float) data_get($dashboardReport, 'finance.sales_total', 0), 2) }}</h4>
                                 </div>
                                 <div class="icon-shape bg-success ">
                                     <i class="ti ti-report-money"></i>
@@ -68,9 +66,8 @@
                         <div class="border rounded card-body border-success bg-light-success">
                             <div class="d-flex align-items-center">
                                 <div class="numbers flex-grow-1 pe-3">
-                                    <p class="mb-1 fw-600 text-muted">Today's Users</p>
-                                    <h4 class="mb-0 fw-700 text-dark-black">2,300 <span
-                                            class="text-sm text-success fw-700">+3%</span></h4>
+                                    <p class="mb-1 fw-600 text-muted">إجمالي المشتريات</p>
+                                    <h4 class="mb-0 fw-700 text-dark-black">{{ number_format((float) data_get($dashboardReport, 'finance.purchase_total', 0), 2) }}</h4>
                                 </div>
                                 <div class="icon-shape bg-success ">
                                     <i class="ti ti-users"></i>
@@ -84,9 +81,8 @@
                         <div class="border rounded card-body border-danger bg-light-danger">
                             <div class="d-flex align-items-center">
                                 <div class="numbers flex-grow-1 pe-3">
-                                    <p class="mb-1 fw-600 text-muted">New Clients</p>
-                                    <h4 class="mb-0 fw-700 text-dark-black">+3,462 <span
-                                            class="text-sm text-danger fw-700">-2%</span></h4>
+                                    <p class="mb-1 fw-600 text-muted">العملاء</p>
+                                    <h4 class="mb-0 fw-700 text-dark-black">{{ number_format((int) data_get($dashboardReport, 'counts.customers', 0)) }}</h4>
                                 </div>
                                 <div class="icon-shape bg-danger ">
                                     <i class="ti ti-click"></i>
@@ -100,9 +96,8 @@
                         <div class="border rounded card-body border-danger bg-light-danger">
                             <div class="d-flex align-items-center">
                                 <div class="numbers flex-grow-1">
-                                    <p class="mb-1 fw-600 text-muted">Sales</p>
-                                    <h4 class="mb-0 fw-700 text-dark-black">$103,430 <span
-                                            class="text-sm text-danger fw-700">+5%</span></h4>
+                                    <p class="mb-1 fw-600 text-muted">الموردين</p>
+                                    <h4 class="mb-0 fw-700 text-dark-black">{{ number_format((int) data_get($dashboardReport, 'counts.suppliers', 0)) }}</h4>
                                 </div>
                                 <div class="icon-shape bg-danger ">
                                     <i class="ti ti-shopping-cart"></i>
@@ -137,62 +132,61 @@
                 <div class="col-12">
                     <div class="card table-card">
                         <div class="card-header">
-                            <h4>Latest Projects</h4>
+                            <h4>تقرير النظام</h4>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table">
                                     <thead>
                                     <tr>
-                                        <th>#</th>
-                                        <th>Project Name</th>
-                                        <th>Start Date</th>
-                                        <th>Due Date</th>
-                                        <th>Status</th>
-                                        <th>Assign</th>
+                                        <th>المؤشر</th>
+                                        <th>القيمة</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <tr>
-                                        <td>1</td>
-                                        <td>Admin v1</td>
-                                        <td>01/01/2017</td>
-                                        <td>26/04/2017</td>
-                                        <td><span class="badge bg-primary">Released</span></td>
-                                        <td>Coderthemes</td>
+                                        <td>عدد الأصناف</td>
+                                        <td>{{ number_format((int) data_get($dashboardReport, 'counts.items', 0)) }}</td>
                                     </tr>
                                     <tr>
-                                        <td>2</td>
-                                        <td>Frontend v1</td>
-                                        <td>01/01/2017</td>
-                                        <td>26/04/2017</td>
-                                        <td><span class="badge bg-success">Released</span></td>
-                                        <td>admin</td>
+                                        <td>فواتير المبيعات</td>
+                                        <td>{{ number_format((int) data_get($dashboardReport, 'counts.sales_invoices', 0)) }}</td>
                                     </tr>
                                     <tr>
-                                        <td>3</td>
-                                        <td>Admin v1.1</td>
-                                        <td>01/05/2017</td>
-                                        <td>10/05/2017</td>
-                                        <td><span class="badge bg-danger">Pending</span></td>
-                                        <td>Coderthemes</td>
+                                        <td>فواتير المشتريات</td>
+                                        <td>{{ number_format((int) data_get($dashboardReport, 'counts.purchase_invoices', 0)) }}</td>
                                     </tr>
                                     <tr>
-                                        <td>4</td>
-                                        <td>Frontend v1.1</td>
-                                        <td>01/01/2017</td>
-                                        <td>31/05/2017</td>
-                                        <td><span class="badge bg-info">Work in Progress</span>
-                                        </td>
-                                        <td>admin</td>
+                                        <td>إجمالي مرتجع المبيعات</td>
+                                        <td>{{ number_format((float) data_get($dashboardReport, 'finance.sales_returns_total', 0), 2) }}</td>
                                     </tr>
                                     <tr>
-                                        <td>5</td>
-                                        <td>Admin v1.3</td>
-                                        <td>01/01/2017</td>
-                                        <td>31/05/2017</td>
-                                        <td><span class="badge bg-warning">Coming soon</span></td>
-                                        <td>Coderthemes</td>
+                                        <td>صافي المبيعات</td>
+                                        <td>{{ number_format((float) data_get($dashboardReport, 'finance.net_sales', 0), 2) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>المدفوع من المبيعات</td>
+                                        <td>{{ number_format((float) data_get($dashboardReport, 'finance.sales_paid_total', 0), 2) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>المتبقي من المبيعات</td>
+                                        <td>{{ number_format((float) data_get($dashboardReport, 'finance.sales_due_total', 0), 2) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>إجمالي مرتجع المشتريات</td>
+                                        <td>{{ number_format((float) data_get($dashboardReport, 'finance.purchase_returns_total', 0), 2) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>صافي المشتريات</td>
+                                        <td>{{ number_format((float) data_get($dashboardReport, 'finance.net_purchases', 0), 2) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>المدفوع من المشتريات</td>
+                                        <td>{{ number_format((float) data_get($dashboardReport, 'finance.purchase_paid_total', 0), 2) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>المتبقي من المشتريات</td>
+                                        <td>{{ number_format((float) data_get($dashboardReport, 'finance.purchase_due_total', 0), 2) }}</td>
                                     </tr>
                                     </tbody>
                                 </table>

@@ -2,8 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Customer;
+use App\Models\Items;
+use App\Models\PurchaseInvoice;
+use App\Models\PurchaseReturn;
 use App\Http\Requests\UpdateSettingRequest;
+use App\Models\SalesInvoice;
+use App\Models\SalesReturn;
 use App\Models\Settings;
+use App\Models\Supplier;
 use App\Services\Tenants\SettingsCacheService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -13,7 +20,54 @@ class AdminController extends AdminBaseController
 {
     public function index()
     {
-        return view('admin.index');
+        $ownerId = $this->ownerId();
+
+        $salesInvoicesQuery = SalesInvoice::query()
+            ->where('user_id', $ownerId)
+            ->where('status', '!=', 'cancelled');
+
+        $purchaseInvoicesQuery = PurchaseInvoice::query()
+            ->where('user_id', $ownerId)
+            ->where('status', '!=', 'cancelled');
+
+        $salesTotal = (float) (clone $salesInvoicesQuery)->sum('total');
+        $salesPaidTotal = (float) (clone $salesInvoicesQuery)->sum('paid_amount');
+        $salesDueTotal = (float) (clone $salesInvoicesQuery)->sum('remaining_amount');
+        $salesReturnsTotal = (float) SalesReturn::query()
+            ->where('user_id', $ownerId)
+            ->sum('total');
+
+        $purchaseTotal = (float) (clone $purchaseInvoicesQuery)->sum('total');
+        $purchasePaidTotal = (float) (clone $purchaseInvoicesQuery)->sum('paid_amount');
+        $purchaseDueTotal = (float) (clone $purchaseInvoicesQuery)->sum('remaining_amount');
+        $purchaseReturnsTotal = (float) PurchaseReturn::query()
+            ->where('user_id', $ownerId)
+            ->where('status', '!=', 'cancelled')
+            ->sum('total');
+
+        $dashboardReport = [
+            'counts' => [
+                'customers' => Customer::query()->where('user_id', $ownerId)->count(),
+                'suppliers' => Supplier::query()->where('user_id', $ownerId)->count(),
+                'items' => Items::query()->where('user_id', $ownerId)->count(),
+                'sales_invoices' => (clone $salesInvoicesQuery)->count(),
+                'purchase_invoices' => (clone $purchaseInvoicesQuery)->count(),
+            ],
+            'finance' => [
+                'sales_total' => $salesTotal,
+                'sales_paid_total' => $salesPaidTotal,
+                'sales_due_total' => $salesDueTotal,
+                'sales_returns_total' => $salesReturnsTotal,
+                'net_sales' => $salesTotal - $salesReturnsTotal,
+                'purchase_total' => $purchaseTotal,
+                'purchase_paid_total' => $purchasePaidTotal,
+                'purchase_due_total' => $purchaseDueTotal,
+                'purchase_returns_total' => $purchaseReturnsTotal,
+                'net_purchases' => $purchaseTotal - $purchaseReturnsTotal,
+            ],
+        ];
+
+        return view('admin.index', compact('dashboardReport'));
     }
 
     public function setting()
