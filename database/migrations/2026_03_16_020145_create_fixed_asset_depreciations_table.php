@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('updated_by')->nullable();
             $table->timestamps();
 
-            $table->unique(['user_id', 'fixed_asset_id', 'period_key']);
+            $table->unique(['user_id', 'fixed_asset_id', 'period_key'], 'fa_dep_uid_faid_pk_unique');
         });
     }
 
